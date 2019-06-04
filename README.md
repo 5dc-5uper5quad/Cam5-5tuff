@@ -30,7 +30,18 @@ to start the front end run
 
 npm run front-end
 
-now the server is operational, and should be accessable from localhost:3007
+now the server is operational, and should be accessable from localhost:3001
+
+API
+
+GET /games/?id=
+  responds with the game to be used for this item page
+POST /games
+  Adds a game to the database
+PUT /games/?id=
+  updates a Games document in the database
+DELETE /games/?id=
+  delets a Games document in the database
 
 
 ## Requirements

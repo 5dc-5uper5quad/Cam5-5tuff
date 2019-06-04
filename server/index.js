@@ -1,6 +1,6 @@
 const express = require('express');
 const bodyParser = require('body-parser');
-const query = require('../database/index.js')
+const {findOneGame, updateOneGame, deleteOneGame, addOneGame} = require('../database/gameController.js')
 const AWS = require('aws-sdk');
 let port = 3008;
 const keys = require('../.aws/credentials.js')
@@ -27,11 +27,11 @@ app.use(bodyParser.json());
 
 
 app.get('/gameObject', async function(req,res){
-  var object =  ((await query.query(req.query.id))[0])
-  object = JSON.parse(JSON.stringify(object));
-  object.VideoLinks=[];
-  object.PhotoLinks=[];
-  object.ThumbnailLinks=[];
+  var game =  ((await findOneGame(req.query.id))[0])
+  game = JSON.parse(JSON.stringify(game));
+  game.VideoLinks=[];
+  game.PhotoLinks=[];
+  game.ThumbnailLinks=[];
    var getVideoUrls = async function(obj){
     videoparams.Key = obj['videoFileNames'][0].toString()+'.mkv';
     s3.getSignedUrl('getObject', videoparams, async(err,url)=>{
@@ -99,14 +99,55 @@ app.get('/gameObject', async function(req,res){
       }
     })
   }
-  getVideoUrls(object);
+  getVideoUrls(game);
    //res.send(object);
 })
 
-app.get('/test', async function (req, res) {
-  res.send('woooo testing!!');
+app.post('/games', (req, res) => {
+  //add a new game to the DB
+  if(!req.body.game){
+    res.status(400).send('missing game')
+  } else {
+    addOneGame(res.body.game, (err, result) => {
+      if(err){
+        res.status(400).send(err)
+      } else {
+        res.status(200).send(result)
+      }
+    })
+  }
 })
 
+app.put('/games', (req, res) => {
+  if(!req.query.id){
+    res.status(400).send('No Game ID provided')
+  } else {
+    //modify a Game entry based on query ID
+    updateOneGame(req.query.id, req.body.game, (err, result) => {
+      if(err) {
+        res.status(400).send(err)
+      } else {
+        res.status(200).send(result)
+      }
+    })
+  }
+})
+
+
+app.delete('/games', (req,res) => {
+  if(!req.query.id){
+    res.status(400).send('No Game ID Provided')
+  } else {
+    //delete a Game entry based on ID
+    deleteOneGame(req.query.id, (err) => {
+      if(err){
+        res.status(400).send(err)
+      } else {
+        res.status(200).send()
+      }
+    })
+  }
+})
 app.listen(port, function(){
   console.log(`listening on port ${port}`);
 })
