@@ -11,7 +11,8 @@
     "seed-db": "node ./DBseed/itemGen.js",
     "front-end": "webpack -d --watch",
     "express-server": "NODE_ENV=development nodemon server/index.js",
-    "test": "jest"
+    "test": "jest",
+    "start": "node ./server/index.js"
   },
   "dependencies": {
     "aws-sdk": "^2.463.0",

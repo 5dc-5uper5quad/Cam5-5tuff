@@ -26,7 +26,7 @@ app.use(bodyParser.urlencoded());
 app.use(bodyParser.json());
 
 
-app.get('/gameObject', async function(req,res){
+app.get('/games', async function(req,res){
   var game =  ((await findOneGame(req.query.id))[0])
   game = JSON.parse(JSON.stringify(game));
   game.VideoLinks=[];
@@ -148,6 +148,7 @@ app.delete('/games', (req,res) => {
     })
   }
 })
+
 app.listen(port, function(){
   console.log(`listening on port ${port}`);
 })
