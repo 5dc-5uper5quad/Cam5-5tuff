@@ -5,20 +5,18 @@ var generate = () => {
 }
 
 var seed = (callback) => {
-  let chunk = []
-  for(let i = 0; i < 100000; i++){
-  chunk.push(generate())
+  var buildChunk = () => {
+    let chunk = []
+    for(let i = 0; i < 100000; i++){
+      chunk.push(generate())
+    }
+    return chunk
   }
-  callback(chunk)
+  for(let i = 0; i < 100; i++) {
+    callback(buildChunk())
+  }
 }
 
-let count = 0
-for(let i = 0; i < 100; i++) {
-  seed((chunk) => {
-    console.log(count++)
-  })
-}
-console.log(count)
 
 
 module.exports.seed = seed
