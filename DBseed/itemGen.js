@@ -89,7 +89,7 @@ async function addGame(id){
 
 async function storeGames(){
 
-  for(let i = 1; i <= 100;i++){
+  for(let i = 1; i <= 10000000;i++){
     await addGame(i);
     }
     mongoose.disconnect();

@@ -8,16 +8,20 @@
     "node": ">=10.15.3"
   },
   "scripts": {
-    "seed-db": "node ./DBseed/itemGen.js",
+    "seed-mongo": "node ./DBseed/itemGen.js",
+    "seed-pg": "node ./DBseed/pgSeed.js",
+    "seed-cass": "node ./DBseed/cassSeed.js",
+    "seed-test": "node ./DBseed/testSeed.js",
     "front-end": "webpack -d --watch",
     "express-server": "NODE_ENV=development nodemon server/index.js",
     "test": "jest",
-    "start": "node ./server/index.js"
+    "start": "nodemon ./server/index.js"
   },
   "dependencies": {
     "aws-sdk": "^2.463.0",
     "babel-runtime": "^6.26.0",
     "body-parser": "^1.19.0",
+    "cassandra-driver": "^4.1.0",
     "express": "^4.17.0",
     "faker": "^4.1.0",
     "mongoose": "^5.5.9",

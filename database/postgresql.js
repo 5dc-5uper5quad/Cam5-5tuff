@@ -1,6 +1,6 @@
 const pg = require('pg')
 
-const connection="postgres://root:@localhost:5432/postgres"
+const connection="postgres://@localhost:5432/postgres"
 
 const pgClient = new pg.Client(connection)
 
@@ -12,4 +12,4 @@ pgClient.connect()
     console.log('postgres connection error', err)
   })
 
-module.exports.db = pgClient
+module.exports.pgdb = pgClient

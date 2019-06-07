@@ -1,26 +1,28 @@
 const express = require('express');
 const bodyParser = require('body-parser');
-const {findOneGame, updateOneGame, deleteOneGame, addOneGame} = require('../database/gameController.js')
+//const {findOneGame, updateOneGame, deleteOneGame, addOneGame} = require('../database/gameController.js')
 const AWS = require('aws-sdk');
+const pgdb = require('../database/postgresql')
+// const keys = require('../.aws/credentials.js')
 let port = 3001;
-const keys = require('../.aws/credentials.js')
+
 let app = express();
-var s3 = new AWS.S3({apiVersion: '2006-03-01',
-accessKeyId:keys.AWS_ACCESS_KEY,
-secretAccessKey:keys.AWS_SECRET_KEY,
-region:"us-west-1"});
-var videoparams ={
-  Bucket:keys.VIDEO_BUCKET,
-  Key:''
-};
-var photoparams = {
-  Bucket:keys.PHOTO_BUCKET,
-  Key:''
-}
-var thumbnailparams = {
-  Bucket:keys.THUMBNAIL_BUCKET,
-  Key:''
-}
+// var s3 = new AWS.S3({apiVersion: '2006-03-01',
+// accessKeyId:keys.AWS_ACCESS_KEY,
+// secretAccessKey:keys.AWS_SECRET_KEY,
+// region:"us-west-1"});
+// var videoparams ={
+//   Bucket:keys.VIDEO_BUCKET,
+//   Key:''
+// };
+// var photoparams = {
+//   Bucket:keys.PHOTO_BUCKET,
+//   Key:''
+// }
+// var thumbnailparams = {
+//   Bucket:keys.THUMBNAIL_BUCKET,
+//   Key:''
+// }
 app.use(express.static(__dirname + '/../dist'));
 app.use(bodyParser.urlencoded());
 app.use(bodyParser.json());

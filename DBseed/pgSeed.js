@@ -1,5 +1,4 @@
-const pg = require('pg')
-const db = require('../database/postgresql.js')
+const pgdb = require('../database/postgresql.js')
 const faker = require('faker')
 
 // gameId:Number,
@@ -12,19 +11,19 @@ const faker = require('faker')
 // videoFileNames:Array,
 // photoFileNames:Array
 var generate = () => {
-  return {
-    gameTitle: faker.lorem.word(),
-    gameDescription: faker.lorem.paragraph(),
-    gameDeveloper: faker.company.companyName(),
-    gamePublisher: faker.company.companyName(),
-    releaseDate:faker.date.recent(),
-    metaTags: faker.lorem.words(),
-    photoFileNames: faker.image.imageUrl()
-  }
+  return `{
+    "gameTitle": "${faker.lorem.word()}",
+    "gameDescription": "${faker.lorem.paragraph()}",
+    "gameDeveloper": "${faker.company.companyName()}",
+    "gamePublisher": "${faker.company.companyName()}",
+    "releaseDate": "${faker.date.recent()}",
+    "metaTags": "${faker.lorem.words()}",
+    "photoFileNames": "${faker.image.imageUrl()}"
+  }"`
 }
 
 var seed = () => {
-  db.query(`create table games(
+  pgdb.query(`create table games(
     gameId int,
     gameData json
     );`)
@@ -35,22 +34,22 @@ var seed = () => {
       }
       let promises = []
       result.forEach((entry) => {
-        promises.push(db.query(`insert into games (gameId, gameData) (${entry[0]}, ${entry[1]}})`))
+        promises.push(pgdb.query(`insert into games (gameId, gameData) values (${entry[0]}, ${entry[1]}})`))
       })
       return promises
     })
-    .all(promises)
+    .all()
     .catch(err => console.log(err))
 
 
 
 }
 
-db.query('drop database if exists games')
+pgdb.query('drop database if exists games')
   .then(() => {
-    db.query('create database games')
+    pgdb.query('create database games')
       .then(() => {
-        db.query('\\c games')
+        pgdb.query('\\c games')
         .then(seed)
         .catch(err => console.log(err))
       })
