@@ -1,5 +1,5 @@
 const cassandra = require('cassandra-driver')
-const cassdb = require('../database/cassandra.js')
+const {cassdb} = require('../database/cassandra.js')
 const {seed} = require('./testSeed')
 
 // gameId:Number,
@@ -15,23 +15,62 @@ const {seed} = require('./testSeed')
 
 
 
-cassdb.execute('drop keyspace if exists games')
+cassdb.execute('drop keyspace if exists games;')
   .then(() => {
-    return cassdb.execute('create keyspace games')
+    return cassdb.execute(`create keyspace games with replication = {
+      'class' : 'SimpleStrategy',
+      'replication_factor' : 1
+    };`)
+  })
+  .then(() => {
+    return cassdb.execute('use games')
   })
   .then(() => {
     return cassdb.execute(`create table games.games(
-      gameId int primary key,
+      gameId UUID primary key,
       gameData text
       );`)
   })
   .then(() => {
-      let queries = []
-      seed((chunk) => {
-        chunk.forEach((query, index) => {
-          queries.push({query:`insert into games(gameId, gameData) values(${index}, ${query})`})
+    var recurseSeed = (count) => {
+      var buildBatch = (chunk, size) =>{
+        let batch = []
+        for(let i = 0; i <= size; i++){
+          let data = chunk.pop()
+          batch.push({query:`insert into games (gameId, gameData) values (uuid(), '${data}')`})
+        }
+        return batch
+      }
+
+      var completeBatch = (batch) =>{
+        cassdb.batch(batch, { prepare: true })
+          .then(() =>{
+            if(batches[0]){
+              console.log(batches.length)
+              completeBatch(batches.pop())
+            } else {
+              console.log(`finished batches: ${count}`)
+              count ++
+              recurseSeed(count)
+            }
+          })
+          .catch((err) => { 
+            console.log(err)
+          })
+      }
+
+      let batches = []
+      if(count <= 100) {
+        seed((chunk) => {
+          console.log('chunk recieved')
+          for(let i = 0; i <= 10000; i++){
+            batches.push(buildBatch(chunk, 10))
+          }
         })
-      cassdb.batch(queries, {prepare:true})
-    })
+        console.log(`starting batches: ${count}`)
+        completeBatch(batches.pop())
+      }
+    }
+    recurseSeed(0)
   })
   .catch(err => console.log(err))

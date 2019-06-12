@@ -43,7 +43,10 @@ PUT /games/?id=
 DELETE /games/?id=
   delets a Games document in the database
 
+start postgres: pg_ctl -D /usr/local/var/postgres start
+stop postgres:pg_ctl -D /usr/local/var/postgres stop
 
+start cassandra: cassandra -f
 ## Requirements
 
 An `nvmrc` file is included if using [nvm](https://github.com/creationix/nvm).
