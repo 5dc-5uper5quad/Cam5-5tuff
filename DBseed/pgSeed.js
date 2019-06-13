@@ -1,5 +1,4 @@
 const {pool} = require('../database/postgresql.js')
-const faker = require('faker')
 const {seed} = require('./testSeed')
 // gameId:Number,
 // gameTitle:String,
@@ -10,26 +9,31 @@ const {seed} = require('./testSeed')
 // metaTags:Array,
 // videoFileNames:Array,
 // photoFileNames:Array
+
+// start postgres: pg_ctl -D /usr/local/var/postgres start
+// stop postgres:pg_ctl -D /usr/local/var/postgres stop
 pool.connect()
   .then(() => {
     return pool.query('drop table if exists games')
   })
   .then(() => {
-    console.log('1')
-    console.log(pool)
     return pool.query(`create table games(
-      gameId int,
+      gameId int primary key,
       gameData text
       );`)
   })
   .then(() => {
+    console.log('games table dropped and re-initialized, beginning Seed:')
+    let nextId = 0
+    var startTime = Date.now()
     var recurseSeed = (count) => {
       let promises = []
       if(count <= 100) {
         seed((chunk) => {
           console.log('chunk recieved')
           chunk.forEach((data, index) => {
-            promises.push(pool.query(`insert into games (gameId, gameData) values (${index}, '${data}')`))
+            promises.push(pool.query(`insert into games (gameId, gameData) values (${nextId}, '${data}')`))
+            nextId++
           })
           console.log(`Inserting Chunk: ${count}`)
           Promise.all(promises)
@@ -39,11 +43,11 @@ pool.connect()
               recurseSeed(count)
             })
         })
+      } else {
+        let minsElapsed = (((Date.now() - startTime)/1000)/60).toFixed(2)
+        console.log(`seeding postgres completed in ${minsElapsed} minutes`)
       }
     }
     recurseSeed(0)
-  })
-  .then(() => {
-    console.log('seeding postgres completed')
   })
   .catch(err => console.log(err))

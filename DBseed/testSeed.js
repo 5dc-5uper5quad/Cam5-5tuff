@@ -10,7 +10,7 @@ var generate = () => {
   "photoFileNames": "${faker.image.imageUrl()}"}`
 }
 
-var seed = async (callback) => {
+var seed = (callback) => {
   var buildChunk = () => {
     let chunk = []
     for(let i = 0; i < 100000; i++){

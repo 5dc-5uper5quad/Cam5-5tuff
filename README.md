@@ -43,10 +43,21 @@ PUT /games/?id=
 DELETE /games/?id=
   delets a Games document in the database
 
+POSTGRES
 start postgres: pg_ctl -D /usr/local/var/postgres start
 stop postgres:pg_ctl -D /usr/local/var/postgres stop
 
-start cassandra: cassandra -f
+CASSANDRA 
+seems to require JDK version 8
+check jdk version:
+java -version
+(should read ~1.8)
+else download correct version and run:
+export JAVA_HOME=`/usr/libexec/java_home -v 1.8`
+
+start cassandra: 
+cassandra -f
+kill cassandra process: kill $(lsof -t -i :[PORT_NUMBER])
 ## Requirements
 
 An `nvmrc` file is included if using [nvm](https://github.com/creationix/nvm).
