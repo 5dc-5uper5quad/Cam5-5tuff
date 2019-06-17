@@ -31,7 +31,7 @@ pool.connect()
       if(count <= 100) {
         seed((chunk) => {
           console.log('chunk recieved')
-          chunk.forEach((data, index) => {
+          chunk.forEach((data) => {
             promises.push(pool.query(`insert into games (gameId, gameData) values (${nextId}, '${data}')`))
             nextId++
           })
