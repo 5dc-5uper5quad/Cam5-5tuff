@@ -1,5 +1,18 @@
 const faker = require('faker')
-
+var counter = 0
+getVideoFileNames = (n) => {
+  let fileNames = []
+  for(let i = 0; i <= n; i++){
+    if(counter <= 135){
+      fileNames.push('' + counter)
+      counter++
+    } else {
+      counter = 0
+      fileNames.push('' + counter)
+    }
+  }
+  return fileNames
+}
 var generate = () => {
   return `{"gameTitle": "${faker.lorem.word()}",
   "gameDescription": "${faker.lorem.paragraph()}",
@@ -7,7 +20,10 @@ var generate = () => {
   "gamePublisher": "${faker.lorem.words()}",
   "releaseDate": "${faker.date.recent()}",
   "metaTags": "${faker.lorem.words()}",
-  "photoFileNames": "${faker.image.imageUrl()}"}`
+  "PhotoLinks": "${[faker.image.imageUrl(), faker.image.imageUrl(), faker.image.imageUrl()]}",
+  "videoFilesNames": "${[getVideoFileNames(3)]}",
+  "ThumbnailLinks": "${[faker.image.imageUrl(), faker.image.imageUrl(), faker.image.imageUrl()]}"
+}`
 }
 
 var seed = (callback) => {

@@ -1,13 +1,17 @@
 const {pool} = require('./postgresql.js')
 
 module.exports.findOneGame = (idNumber, callback)=>{
-  return pool.query(`select gameData from games where gameId = idNumber`, (err, result) => {
-
+  pool.query(`select gameData from games where gameId = ${idNumber}`, (err, result) => {
+    if(err){
+      callback(err)
+    } else {
+      callback(null, result)
+    }
   })
 }
 
 module.exports.deleteOneGame = (idNumber, callback) => {
-
+  
 }
 
 module.exports.updateOneGame = (idNumber, changes,  callback) => {
