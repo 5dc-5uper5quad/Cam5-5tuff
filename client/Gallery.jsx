@@ -39,9 +39,15 @@ constructor(props){
 componentDidMount(){
 }
 render(){
-  var thumburls = this.props.thumbnailUrls.map((val,index)=><ThumbNails src={val} onClick={this.props.videoClickFunction.bind(null, index)}/>);
+  var thumburls = this.props.thumbnailUrls.map((val,index)=><ThumbNails 
+  key={index}
+  src={val} 
+  onClick={this.props.videoClickFunction.bind(null, index)}/>);
 
-  var photourls = this.props.photoUrls.map((val, index)=><ThumbNails src = {val} onClick={this.props.photoClickFunction.bind(null, index)}/>);
+  var photourls = this.props.photoUrls.map((val, index)=><ThumbNails 
+  key={index}
+  src = {val} 
+  onClick={this.props.photoClickFunction.bind(null, index)}/>);
 
   return (<OverflowScrolling >
     <Bar className="gallery-bar overflow-scrolling" >{thumburls}{photourls}{thumburls}{photourls}</Bar>

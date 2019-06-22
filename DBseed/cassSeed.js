@@ -62,11 +62,11 @@ cassdb.execute('drop keyspace if exists games;')
       let minsElapsed = (((Date.now() - startTime)/1000)/60).toFixed(2)
       console.log(`Finished seeding Cassandra in ${minsElapsed} minutes`)
       cassdb.execute(`create table if not exists games.id_tracker(
-        deleted set<int>
+        deleted set<int>,
         nextId int
       )`, )
         .then(() => {
-          cassdb.query(`insert into games.id_tracker (nextId) values(${nextId})`)
+          cassdb.execute(`insert into games.id_tracker (nextId) values(${nextId})`)
         })
     }
   }

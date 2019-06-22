@@ -19,10 +19,9 @@ var generate = () => {
   "gameDeveloper": "${faker.lorem.words()}",
   "gamePublisher": "${faker.lorem.words()}",
   "releaseDate": "${faker.date.recent()}",
-  "metaTags": "${faker.lorem.words()}",
+  "metaTags": "${[faker.lorem.word(),faker.lorem.word(),faker.lorem.word(),]}",
   "PhotoLinks": "${[faker.image.imageUrl(), faker.image.imageUrl(), faker.image.imageUrl()]}",
-  "videoFilesNames": "${[getVideoFileNames(3)]}",
-  "ThumbnailLinks": "${[faker.image.imageUrl(), faker.image.imageUrl(), faker.image.imageUrl()]}"
+  "videoFilesNames": "${[getVideoFileNames(3)]}"
 }`
 }
 

@@ -57,8 +57,13 @@ class Player extends React.Component {
     }
   render(){
     if(this.state.showPhoto){
-      return(<MediaContainer><Photo src={this.state.currentPhoto} />
-      <Gallery thumbnailUrls={this.props.thumbnailUrls} photoUrls={this.props.photoUrls} videoClickFunction={this.videoClicked} photoClickFunction = {this.photoClicked}/>
+      return(<MediaContainer><Photo 
+      src={this.state.currentPhoto} />
+      <Gallery 
+      thumbnailUrls={this.props.thumbnailUrls} 
+      photoUrls={this.props.photoUrls} 
+      videoClickFunction={this.videoClicked} 
+      photoClickFunction = {this.photoClicked}/>
       </MediaContainer>)
     }else
     return (<MediaContainer>

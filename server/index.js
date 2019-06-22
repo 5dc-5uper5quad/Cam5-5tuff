@@ -1,12 +1,14 @@
+//require('newrelic')
 const express = require('express');
 const bodyParser = require('body-parser');
 //const {findOneGame, updateOneGame, deleteOneGame, addOneGame} = require('../database/gameController.js')
 
 
-const {pgdb} = require('../database/postgresql')
-const {findOneGame, deleteOneGame, updateOneGame, addOneGame} = require('../database/cassController')
-const {mapURLsToFileNames} = require('./s3Controllers.js')
-let port = 3001;
+// const {pgdb} = require('../database/postgresql')
+const {findOneGame, deleteOneGame, updateOneGame, addOneGame} = require('../database/pgController.js')
+const {mapFileNamesToURLs} = require('./s3Controllers.js')
+const {fetchThumbnails, parseArrays} = require('./dataMassager.js')
+let port = process.env.PORT || 3001;
 
 let app = express();
 app.use(express.static(__dirname + '/../dist'));
@@ -23,12 +25,14 @@ app.get('/games', async function(req, res){
   } else {
     findOneGame(req.query.id)
       .then((result) => {
-        let game = JSON.parse(result.gameData)
-        mapURLsToFileNames(game.videoFilesNames, (err, result) => {
+        let game = JSON.parse(result.rows[0].gamedata)
+        mapFileNamesToURLs(game.videoFilesNames, (err, result) => {
           if(err) {
             res.status(400).send(err)
           } else {
             game.videoLinks = result
+            parseArrays(game)
+            fetchThumbnails(game)
             res.status(200).send(game)
           }
         })

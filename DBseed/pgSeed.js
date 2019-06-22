@@ -17,10 +17,19 @@ pool.connect()
     return pool.query('drop table if exists games')
   })
   .then(() => {
+    return pool.query('drop table if exists id_tracker')
+  })
+  .then(() => {
     return pool.query(`create table games(
       gameId int primary key,
       gameData text
       );`)
+  })
+  .then(() => {
+    return pool.query(`create table id_tracker(
+      deleted int[],
+      nextId int
+    );`)
   })
   .then(() => {
     console.log('games table dropped and re-initialized, beginning Seed:')
@@ -46,6 +55,11 @@ pool.connect()
       } else {
         let minsElapsed = (((Date.now() - startTime)/1000)/60).toFixed(2)
         console.log(`seeding postgres completed in ${minsElapsed} minutes`)
+        pool.query(`insert into id_tracker (nextId) values(${nextId})`, (err) => {
+          if(err) {
+            console.log(err)
+          }
+        })
       }
     }
     recurseSeed(0)
