@@ -10,10 +10,10 @@ var videoParams ={
   Key:''
 };
 
-var mapFileNamesToURLs = (fileNamesArr, callback) => {
+var mapFileNamesToURLs = (fileNames, callback) => {
   let URLs = []
-
-  var mapURLs = (fileNamesArr) => {
+  let fileNamesArr = fileNames.split(',')
+  var mapURLs = (fileNamesArr) => {  
     videoParams.Key = fileNamesArr.pop() + '.mkv'
     s3.getSignedUrl('getObject', videoParams, (err, result) => {
       if(err){

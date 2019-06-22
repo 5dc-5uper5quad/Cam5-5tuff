@@ -12,10 +12,11 @@
     "seed-pg": "node ./DBseed/pgSeed.js",
     "seed-cass": "node ./DBseed/cassSeed.js",
     "seed-test": "node ./DBseed/testSeed.js",
-    "front-end": "webpack -d --watch",
+    "react-dev": "webpack -d --watch",
     "express-server": "NODE_ENV=development nodemon server/index.js",
     "test": "jest",
-    "start": "nodemon ./server/index.js"
+    "start": "node ./server/index.js",
+    "start-dev": "nodemon ./server/index.js"
   },
   "dependencies": {
     "aws-sdk": "^2.463.0",
