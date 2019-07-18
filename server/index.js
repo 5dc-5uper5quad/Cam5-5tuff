@@ -1,10 +1,5 @@
-//require('newrelic')
 const express = require('express');
 const bodyParser = require('body-parser');
-//const {findOneGame, updateOneGame, deleteOneGame, addOneGame} = require('../database/gameController.js')
-
-
-// const {pgdb} = require('../database/postgresql')
 const {findOneGame, deleteOneGame, updateOneGame, addOneGame} = require('../database/pgController.js')
 const {mapFileNamesToURLs} = require('./s3Controllers.js')
 const {fetchThumbnails, parseArrays} = require('./dataMassager.js')
@@ -14,10 +9,6 @@ let app = express();
 app.use(express.static(__dirname + '/../dist'));
 app.use(bodyParser.urlencoded());
 app.use(bodyParser.json());
-
-// game.VideoLinks=[];
-// game.PhotoLinks=[];
-// game.ThumbnailLinks=[];
 
 app.get('/games', async function(req, res){
   if(!req.query.id){
@@ -90,78 +81,3 @@ app.listen(port, function(){
   console.log(`listening on port ${port}`);
 })
 
-
-// var game =  ((await findOneGame(req.query.id))[0])
-// game = JSON.parse(JSON.stringify(game));
-// game.VideoLinks=[];
-// game.PhotoLinks=[];
-// game.ThumbnailLinks=[];
-//  var getVideoUrls = async function(obj){
-//   videoparams.Key = obj['videoFileNames'][0].toString()+'.mkv';
-//   s3.getSignedUrl('getObject', videoparams, async(err,url)=>{
-//     if(err) console.log(err)
-//     else{
-//       obj.VideoLinks.push(url);
-
-//       videoparams.Key = obj['videoFileNames'][1].toString()+'.mkv';
-//       s3.getSignedUrl('getObject', videoparams, async(err,url)=>{
-//         if(err) console.log(err)
-//         else{
-//           obj.VideoLinks.push(url);
-
-//           videoparams.Key = obj['videoFileNames'][2].toString()+'.mkv';
-//           s3.getSignedUrl('getObject', videoparams, async(err,url)=>{
-//             if(err) console.log(err)
-//             else{
-//               obj.VideoLinks.push(url);
-//               photoparams.Key = obj['photoFileNames'][0].toString()+'.jpg';
-//               s3.getSignedUrl('getObject', photoparams,(err,url)=>{
-//                 if(err){
-//                   console.log('couldnt get photo', err)
-//                 }else{
-//                   object.PhotoLinks.push(url);
-//                   photoparams.Key = obj['photoFileNames'][1].toString()+'.jpg';
-//                   s3.getSignedUrl('getObject', photoparams,(err,url)=>{
-//                     if(err){
-//                       console.log('couldnt get photo', err)
-//                     }else{
-//                       object.PhotoLinks.push(url);
-//                       thumbnailparams.Key = obj['videoFileNames'][0].toString()+'.jpg';
-//                       s3.getSignedUrl('getObject', thumbnailparams, (err, url)=>{
-//                         if(err){
-//                           console.log('coundnt get thumbnail',err)
-//                         }else{
-//                           obj.ThumbnailLinks.push(url);
-//                           thumbnailparams.Key = obj['videoFileNames'][1].toString()+'.jpg';
-//                           s3.getSignedUrl('getObject', thumbnailparams, (err, url)=>{
-//                             if(err){
-//                               console.log('coundnt get thumbnail',err)
-//                             }else{
-//                               obj.ThumbnailLinks.push(url);
-//                               thumbnailparams.Key = obj['videoFileNames'][2].toString()+'.jpg';
-//                               s3.getSignedUrl('getObject', thumbnailparams, (err, url)=>{
-//                               if(err){
-//                                 console.log('coundnt get thumbnail',err)
-//                               }else{
-//                                 obj.ThumbnailLinks.push(url);
-//                                 res.send(obj)
-//                               }
-//                             })
-//                             }
-//                              })
-//                         }
-//                       })
-//                     }
-//                   })
-//                 }
-//               })
-
-//             }
-//           })
-//         }
-//       })
-//     }
-//   })
-// }
-// getVideoUrls(game);
-//  //res.send(object);
