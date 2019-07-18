@@ -35,3 +35,6 @@ dist/bundle.js
 .elasticbeanstalk/*
 !.elasticbeanstalk/*.cfg.yml
 !.elasticbeanstalk/*.global.yml
+
+# other files
+STYLE-GUIDE.md
